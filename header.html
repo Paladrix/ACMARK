@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="iso-8859-2">
+    <title>Form validation in Javascript</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script type="text/javascript" src="script.js"></script>
+    <script type="text/javascript" src="jquery-3.1.1.min.js"></script>
+    <!-- Compiled and minified CSS -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+ 
+    <!-- Compiled and minified JavaScript -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+    <title></title>
+</head>
+<body>
+  <div class="row">
+    <form class="col s12" method="POST" action="connect.php" onsubmit="return Validate()" name="vForm">
+      <div class="row">
+        <div class="input-field col s12 m4 l2 offset-s0 offset-m4 offset-l5">
+          <input  class="validate" type="text" name="ico">
+          <div id="ico_error" class="val_error"></div>
+          <label for="ico">IČO</label>
+        </div>
+      </div>
+      <div class="row">
+         <div class="input-field col s12 m4 l2 offset-s0 offset-m4 offset-l5">
+          <input id="firma" type="text" class="validate" name="firma">
+          <div id="firm_error" class="val_error"></div>
+          <label for="firma">Firma</label>
+        </div>
+      </div>
+      <div class="row">
+        <button id="butt" class="btn waves-effect waves-light col s12 m4 l2 offset-s0 offset-m4 offset-l5" type="submit" name="action">
+        <i class="material-icons">odeslat</i>
+        </button>
+      </div>
+    </form>
+  </div>
+
+ 
+<!-- add javascript here -->
+<script type="text/javascript">
+    // GETTING ALL INPUT TEXT FIELDS
+    var ico = document.forms["vForm"]["ico"];
+    var firma = document.forms["vForm"]["firma"];
+    var frame = document.getElementById("toast");
+ 
+ function testICO()
+{
+	var tmp = ico.value;
+    var a = 0;
+    var b = tmp.split('');
+    if(tmp.length != 8) return false;
+    
+    var c = 0;
+    for(var i = 0; i < 7; i++){
+        a += (parseInt(b[i]) * (8 - i));
+    }
+    a = a % 11;
+    c = 11 - a;
+    c = c % 10;
+    if(parseInt(b[ 7]) != c){
+    	return false;
+    }
+
+  return true;
+
+}
+
+if (<?php $_GET["err"]==1 ?>) {
+Materialize.toast('Záznam nenalezen.', 3000, 'rounded');
+
+}
+
+
+
+  function Validate(){
+  	if(ico.value == ""){
+      ico.style.borderBottom = "1px solid red";
+      ico.style.boxShadow = "0 1px 0 0 #8B0000";
+      		Materialize.toast('Prosím, vyplňte IČO.', 3000, 'rounded');
+            ico.focus();
+            return false;
+        }
+    if(isNaN(ico.value)){
+      ico.style.borderBottom = "1px solid red";
+      ico.style.boxShadow = "0 1px 0 0 #8B0000";
+            Materialize.toast('Zadejte platné IČO.', 3000, 'rounded');
+            ico.focus();
+            return false;
+        }
+
+    if(testICO() == false){
+      ico.style.borderBottom = "1px solid red";
+      ico.style.boxShadow = "0 1px 0 0 #8B0000";
+            Materialize.toast('Zadejte platné IČO.', 3000, 'rounded');
+            ico.focus();
+            return false;
+    	}
+    if(testICO() == true && firma.value == ""){
+      ico.style.borderBottom = "1px solid green";
+      ico.style.boxShadow = "0 1px 0 0 green";
+      firma.style.borderBottom = "1px solid red";
+      firma.style.boxShadow = "0 1px 0 0 #8B0000";
+      Materialize.toast('Prosím, vyplňte název firmy.', 3000, 'rounded');
+      return false;
+    }
+    	
+    if(firma.value == ""){
+      firma.style.borderBottom = "1px solid red";
+      firma.style.boxShadow = "0 1px 0 0 #8B0000";
+            Materialize.toast('Prosím, vyplňte název firmy.', 3000, 'rounded');
+            firma.focus();
+            return false;
+        }
+ 
+    }
+ 
+</script>
+</body>
+</html>
